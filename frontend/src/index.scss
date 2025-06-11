@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@100..900&display=swap');
+
+$rich-black: #0d1b2aff;
+$oxford-blue: #1b263bff;
+$yinmn-blue: #415a77ff;
+$silver-lake-blue: #778da9ff;
+$platinum: #e0e1ddff;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Lexend Exa", sans-serif;
+}
+
+body {
+    background-color: $oxford-blue;
+}
+
+nav {
+    width: calc(100vw - 4rem);
+    height: 2.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $platinum;
+
+    h3 {
+        font-weight: 300;
+        padding-right: 2rem;
+    }
+}
+
+main {
+    .register-contain {
+        width: 100vw;
+        height: calc(100vh - 2.5rem);
+        min-height: 20vh;
+        border-radius: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        div {
+            background-color: $platinum;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+
+            input, button {
+                padding: 1rem;
+            }
+        }
+    }
+
+    .chat-contain {
+        width: 100vw;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+
+        .header-row{
+            display: flex;
+            justify-content: flex-start;
+            gap: 2rem;
+            align-items: center;
+            h2 {
+                color: $platinum;
+            }
+            button {
+                background-color: $oxford-blue;
+                border: 0;
+                color: $platinum;
+                font-size: 2rem;
+            }
+            button:hover {
+                cursor: pointer;
+            }
+        }
+
+        .new-chat-contain {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1rem;
+            input, button, textarea {
+                padding: 0.5rem;
+            }
+            input {
+                width: 20rem;
+            }
+            button {
+                width: 10rem;
+            }
+        }
+    }
+}

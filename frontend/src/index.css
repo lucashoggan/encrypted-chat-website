@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lexend Exa", sans-serif;
+}
+
+body {
+  background-color: #1b263b;
+}
+
+nav {
+  width: calc(100vw - 4rem);
+  height: 2.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e0e1dd;
+}
+nav h3 {
+  font-weight: 300;
+  padding-right: 2rem;
+}
+
+main .register-contain {
+  width: 100vw;
+  height: calc(100vh - 2.5rem);
+  min-height: 20vh;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main .register-contain div {
+  background-color: #e0e1dd;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+main .register-contain div input, main .register-contain div button {
+  padding: 1rem;
+}
+main .chat-contain {
+  width: 100vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+main .chat-contain .header-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 2rem;
+  align-items: center;
+}
+main .chat-contain .header-row h2 {
+  color: #e0e1dd;
+}
+main .chat-contain .header-row button {
+  background-color: #1b263b;
+  border: 0;
+  color: #e0e1dd;
+  font-size: 2rem;
+}
+main .chat-contain .header-row button:hover {
+  cursor: pointer;
+}
+main .chat-contain .new-chat-contain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+main .chat-contain .new-chat-contain input, main .chat-contain .new-chat-contain button, main .chat-contain .new-chat-contain textarea {
+  padding: 0.5rem;
+}
+main .chat-contain .new-chat-contain input {
+  width: 20rem;
+}
+main .chat-contain .new-chat-contain button {
+  width: 10rem;
+}/*# sourceMappingURL=index.css.map */
