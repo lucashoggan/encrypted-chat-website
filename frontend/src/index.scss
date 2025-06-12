@@ -57,22 +57,33 @@ main {
     }
 
     .chat-contain {
-        width: 100vw;
+        width: calc(100vw - 4rem);
         display: flex;
         justify-content: flex-start;
         flex-direction: column;
         align-items: center;
         padding: 2rem;
+        gap: 1rem;
 
         .header-row{
             display: flex;
             justify-content: flex-start;
             gap: 2rem;
             align-items: center;
+            margin-bottom: 1rem;
             h2 {
+                padding-top: 1rem;
                 color: $platinum;
+                width: 10rem;
+            }
+            img {
+                padding-top: 1rem;
+            }
+            img:hover {
+                cursor: pointer;
             }
             button {
+                padding-top: .75rem;
                 background-color: $oxford-blue;
                 border: 0;
                 color: $platinum;
@@ -97,6 +108,103 @@ main {
             }
             button {
                 width: 10rem;
+            }
+            textarea {
+                max-width: 80vw;
+            }
+        }
+
+        .chat-select-contain {
+            div {
+                padding: 1rem 4rem;
+                background-color: $platinum;
+                h3 {
+                    color: $oxford-blue;
+                    font-weight: 300;
+                    text-decoration: underline;
+                }
+            }
+            div:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .full-message-contain {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 2rem;
+        padding-top: 2rem;
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items:center;
+            gap: 2rem;
+            img {
+                padding-top: 0.1rem;
+            }
+            img:hover {
+                cursor: pointer;
+            }
+            h2 {
+                color: $platinum;
+                font-weight: 400;
+            }
+        }
+        .messages {
+            width: 80vw;
+            .full-screen-message {
+                width: calc(60% - 2rem);
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 2px;
+                p.timestamp {
+                    margin-bottom: 0.25rem;
+                    font-weight: 300;
+                }
+            }
+
+            .sent {
+                margin-right: 40%;
+                background-color: $platinum;
+            }
+
+            .recv {
+                margin-left: 40%;
+                background-color: $silver-lake-blue;
+            }
+        }
+        .send-message-contain {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            textarea {
+                padding: 1rem;
+                background-color: $platinum;
+                border-radius: 2px;
+                border: none;
+                max-width: 70vw;
+            }
+            .send-button {
+                background-color: $platinum;
+                height: 2.5rem;
+                width: 2.5rem;
+                border-radius: 50%;
+                border: none;
+                img {
+                    height: 1rem;
+                    width: 1rem;
+                    margin: 0.75rem;
+                }
+            }
+            .send-button:disabled {
+                background-color: $silver-lake-blue;
             }
         }
     }

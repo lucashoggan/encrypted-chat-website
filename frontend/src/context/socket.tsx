@@ -19,7 +19,7 @@ const SocketContext = createContext<SocketContextType>({
   }
 });
 
-const SOCKET_SERVER_URL = "http://localhost:8080"
+const SOCKET_SERVER_URL:string =  "/";
 
 export const useSocket = () => useContext(SocketContext);
 
@@ -54,6 +54,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     socketInstance.on('disconnect', () => {
       setIsConnected(false);
     });
+
+    socketInstance.on('connect_error', () => {
+      setIsConnected(false);
+    })
 
     // Cleanup on unmount
     return () => {

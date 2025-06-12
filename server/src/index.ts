@@ -1,17 +1,16 @@
 import express, {Request, Response} from 'express';
 import { createServer } from "node:http";
+import { fileURLToPath } from 'node:url';
 import { Server } from 'socket.io';
-import fs from 'fs'
+import path from 'node:path';
+
+// Use CommonJS globals for compatibility
+declare const __dirname: string;
 
 interface User {
     username: string;
     publicKey: string;
     socketID: string;
-}
-
-interface NoSocketUser {
-    username: string;
-    publicKey: string;
 }
 
 interface Message {
@@ -23,6 +22,8 @@ interface Message {
 
 let users: User[] = []; // socket id -> User
 
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 const getUsernames = (): string[] => users.map(v => v.username)
 const getSocketID = (username: string): string => users.filter(v => v.username===username)[0].socketID
 
@@ -36,9 +37,15 @@ const io = new Server(server, {
     }
 });
 
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+    maxAge:"1y",
+    immutable: true
+}))
+
 app.get("/", (req: Request, res: Response) => {
-    res.send("<h1>Hello world</h1>")
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
 })
+
 
 io.on('connection', (socket) => {
     console.log("a user connected")
@@ -52,16 +59,14 @@ io.on('connection', (socket) => {
                 publicKey:payload.publicKey,
                 socketID:socket.id
             })
-            console.log("user registered", {username:payload.username, publicKey:payload.publicKey})
             socket.emit("register-success")
             io.emit('user-list', users.map(v => {return {username:v.username, publicKey:v.publicKey}}))
         }
     })
     
     socket.on("msg-send", (payload: Message) => {
-        //console.log("message sent", payload)
+        console.log("message sent")
         const toSocketID = getSocketID(payload.toUsername)
-        //console.log(users, toSocketID)
         io.to(toSocketID).emit("msg-recv", payload)
     })
 
@@ -71,6 +76,7 @@ io.on('connection', (socket) => {
         io.emit('user-list', users.map(v => {return {username:v.username, publicKey:v.publicKey}}))
     })
 })
+
 
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
