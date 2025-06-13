@@ -26,7 +26,7 @@ const RegisterView = ({ keyPair, isConnected, socket, username, setUsername }: R
         <div className="register-contain">
             <div>
                 <h2>Register</h2>
-                <input type="text" name="username" placeholder="username" onChange={(e) => setUsername(e.target.value)} id="" />
+                <input type="text" name="username" placeholder="username" onChange={(e) => setUsername(e.target.value.trim())} id="" />
                 <button onClick={attemptRegister} disabled={registerLoading || !keyPair || !isConnected}>{!keyPair ? "Wait for encryption key generation" : (!isConnected ? "Waiting on server connection..." : (!registerLoading ? "Submit": "Loading..."))}</button>
             </div>
         </div>
