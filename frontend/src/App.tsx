@@ -1,9 +1,11 @@
 import { useSocket } from "./context/socket"
-import { useState, useEffect } from "react";
+import { useState, useEffect, type JSX } from "react";
 import { type User, type Message } from "./types/socket";
-import {decryptWithPrivateKey, encryptWithPublicKey, exportPublicKey, generateKeyPair, importPublicKey} from "./crypto-functions"
-import arrow_left_plat from "./assets/arrow_left_plat.svg"
-import paper_airplane_blue from "./assets/paper_plate_blue.svg"
+import {decryptWithPrivateKey, generateKeyPair} from "./utils/crypto-functions"
+import RegisterView from "./views/register";
+import NewChatView from "./views/new-chat";
+import SelectChatView from "./views/select-chat";
+import FullChatView from "./views/full-chat";
 
 function App() {
   const {socket, isConnected} = useSocket();
@@ -11,19 +13,11 @@ function App() {
   const [keyPair, setKeyPair] = useState<CryptoKeyPair>()
   const [username, setUsername] = useState("")
   const [registered, setRegistered] = useState(false);
-  const [registerLoading, setRegisterLoading] = useState(false);
-  const [decryptedChats, setDecryptedChats] = useState<Message[]>([])
   const [newChatScreen, setNewChatScreen] = useState(false);
-  const [newChatSending, setNewChatSending] = useState(false);
-  const [newChatContent, setNewChatContent] = useState("")
-  const [newChatUsername, setNewChatUsername] = useState("")
-  const [chatUsernames, setChatUsernames] = useState<string[]>([]);
-  const [fullChatUsername, setFullChatUsername] = useState("")
-  const [fullChatNewMessageContent, setFullChatNewMessageContent] = useState("")
-  const [sentMessages, setSentMessages] = useState<Message[]>([]);
-  const [combinedFullScreenChatMessages, setCombinedFullScreenChatMessages] = useState<Message[]>([]);
+  const [curChatUsername, setCurChatUsername] = useState("")
+  const [chats, setChats] = useState<Message[]>([])
   
-
+  /*
   const attemptRegister = () => {
     setRegisterLoading(true);
     if (!socket) {
@@ -42,7 +36,9 @@ function App() {
       })
     }
   }
-
+  */
+  
+  /*
   const sendMessage = ( toUsername:string, msgContent:string) => {
     setNewChatSending(true);
     const selcUser = users.filter(v => v.username==toUsername)[0];
@@ -68,44 +64,8 @@ function App() {
       setNewChatSending(false)
     })
   }
+  */
 
-
-  useEffect(() => {
-    const tmpUsernames:string[] = []
-    decryptedChats.forEach(val => {
-      if (!tmpUsernames.includes(val.fromUsername) && users.map(v => v.username).includes(val.fromUsername)) {
-        tmpUsernames.push(val.fromUsername)
-      }
-    })
-    sentMessages.forEach(val => {
-      if (!tmpUsernames.includes(val.toUsername) && users.map(v => v.username).includes(val.toUsername)) {
-        tmpUsernames.push(val.toUsername)
-      }
-    })
-    if (!tmpUsernames.includes(fullChatUsername)) {
-      setFullChatUsername("")
-    }
-    setChatUsernames(tmpUsernames)
-  }, [decryptedChats, sentMessages, users, fullChatUsername])
-
-  useEffect(() => {
-    if (fullChatUsername != "") {
-      const tmp: Message[] = [];
-      decryptedChats.forEach(val => {
-        if (val.fromUsername == fullChatUsername) {
-          tmp.push(val)
-        }
-      }
-      )
-      sentMessages.forEach(val => {
-        if (val.toUsername == fullChatUsername) {
-          tmp.push(val)
-        }
-      })
-      setCombinedFullScreenChatMessages(tmp.sort((a, b) => a.timestamp-b.timestamp))
-    } 
-  }, [fullChatUsername, sentMessages, decryptedChats])
-  
   // Generate key pair on mount
   useEffect(() => {
     generateKeyPair().then(setKeyPair);
@@ -118,25 +78,16 @@ function App() {
     const handleUserList = (newUsers: User[]) => setUsers(newUsers);
     
     const handleNewMessage = (msg: Message) => {
-      //console.log("Received message:", msg);
-      //setMessages(prev => {
-        //console.log("Previous messages:", prev);
-        //const newMessages = [...prev, msg];
-        //console.log("New messages:", newMessages);
-        //return newMessages;
-      //});
-
       if (keyPair) {
         decryptWithPrivateKey(msg.content, keyPair.privateKey)
           .then(val => {
-            setDecryptedChats(prev => [...prev, {...msg, content: val}]);
+            setChats(prev => [...prev, {...msg, content: val}]);
           })
           .catch(console.error);
       }
     };
 
     const handleRegisterSuccess = () => {
-      setRegisterLoading(false);
       setRegistered(true);
     };
 
@@ -151,40 +102,66 @@ function App() {
     };
   }, [socket, keyPair]);
 
+  const getContent = ():JSX.Element|null => {
+    if (!registered) {
+      return <RegisterView 
+        keyPair={keyPair}
+        isConnected={isConnected}
+        socket={socket}
+        username={username}
+        setUsername={setUsername}
+      />
+    } else if (curChatUsername === "" && newChatScreen) {
+      return <NewChatView 
+        setNewChatScreen={setNewChatScreen}
+        users={users}
+        username={username}
+        socket={socket}
+        setChats={setChats}
+      />
+    } else if (curChatUsername === "" && !newChatScreen) {
+      return <SelectChatView
+        setFullChatUsername={setCurChatUsername}
+        setNewChatScreen={setNewChatScreen}
+        chats={chats}
+        username={username}
+      />
+    } else if (curChatUsername != "") {
+      return <FullChatView 
+        curChatUsername={curChatUsername}
+        setCurChatUsername={setCurChatUsername}
+        username={username}
+        users={users}
+        socket={socket}
+        setChats={setChats}
+        chats={chats}
+      />
+    }
+
+    return null
+  }
+
   return (
     <>
       <nav>
-        <h1 onClick={() => console.log(chatUsernames)}>Encrypted Chat App</h1>
+        <h1>Encrypted Chat App</h1>
         {username != "" && registered ? <h3>@{username}</h3>: null}
       </nav>
       <main>
+        {getContent()}
+        {/*
         {!registered ? (
-          <div className="register-contain">
-            <div>
-              <h2>Register</h2>
-              <input type="text" name="username" placeholder="username" onChange={(e) => setUsername(e.target.value)} id="" />
-              <button onClick={attemptRegister} disabled={registerLoading || !keyPair || !isConnected}>{!keyPair ? "Wait for encryption key generation" : (!isConnected ? "Waiting on server connection..." : (!registerLoading ? "Submit": "Loading..."))}</button>
-            </div>
-          </div>
-        ) : ( fullChatUsername === "" ? (
-          <div className="chat-contain">
-            <div className="header-row">
-              {newChatScreen ? <img alt="back" src={arrow_left_plat} onClick={() => setNewChatScreen(false)} />: null}
-             {!newChatScreen ? (<><h2>Chats</h2><button onClick={() => setNewChatScreen(true)}>+</button></>): <h2>New Chat</h2>}
-            </div>
-            {newChatScreen ? (<div className="new-chat-contain">
-              <input type="text" onChange={(e) => setNewChatUsername(e.target.value)} name="username" placeholder="username" />
-              <textarea  name="message" onChange={(e) => setNewChatContent(e.target.value)} placeholder="message" cols={40} rows={5} />
-              <button onClick={() => sendMessage(newChatUsername, newChatContent)} disabled={newChatSending}>{users.map(v=>v.username).includes(newChatUsername) ? (!newChatSending ? "Send" : "Sending...") : "No user with such username"}</button>
-            </div>) : (
-              <div className="chat-select-contain">
-                {chatUsernames.map(v => (<div onClick={() => setFullChatUsername(v)} key={v}>
-                  <h3>@{v}</h3>
-                </div>))}
-              </div>
-            ) }
-          </div>
-        ) : (
+          <RegisterView 
+            keyPair={keyPair}
+            isConnected={isConnected}
+            socket={socket}
+            username={username}
+            setUsername={setUsername}
+          />
+        ) : ( fullChatUsername === "" ?  
+          <NewChatScreen 
+
+          />  : (
           <div className="full-message-contain">
             <div className="header">
               <img src={arrow_left_plat} alt="back" onClick={() => setFullChatUsername("")} />
@@ -208,7 +185,7 @@ function App() {
               </button>
             </div>
           </div>
-        ))}
+        ))}*/}
       </main>
     </>
   )

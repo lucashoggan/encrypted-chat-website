@@ -19,7 +19,7 @@ const SocketContext = createContext<SocketContextType>({
   }
 });
 
-const SOCKET_SERVER_URL:string =  "/";
+const SOCKET_SERVER_URL:string =  "localhost:8080";
 
 export const useSocket = () => useContext(SocketContext);
 

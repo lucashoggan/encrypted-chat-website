@@ -29,7 +29,6 @@ app.get("/", (req, res) => {
     res.sendFile(node_path_1.default.join(__dirname, '..', 'public', 'index.html'));
 });
 io.on('connection', (socket) => {
-    console.log("a user connected");
     socket.on('register', (payload) => {
         if (getUsernames().includes(payload.username)) {
             socket.emit("error:register->name-already-exists");
@@ -45,7 +44,6 @@ io.on('connection', (socket) => {
         }
     });
     socket.on("msg-send", (payload) => {
-        console.log("message sent");
         const toSocketID = getSocketID(payload.toUsername);
         io.to(toSocketID).emit("msg-recv", payload);
     });
