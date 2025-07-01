@@ -3,9 +3,9 @@ import { useState, useEffect, type JSX } from "react";
 import { type User, type Message } from "./types/socket";
 import {decryptWithPrivateKey, generateKeyPair} from "./utils/crypto-functions"
 import RegisterView from "./views/register";
-import NewChatView from "./views/new-chat";
-import SelectChatView from "./views/select-chat";
-import FullChatView from "./views/full-chat";
+//import NewChatView from "./views/new-chat";
+//import SelectChatView from "./views/select-chat";
+//import FullChatView from "./views/full-chat";
 import HomeView from "./views/home";
 
 function App() {
@@ -79,7 +79,7 @@ function App() {
   return (
     <>
       <nav>
-        <h1>Encrypted Chat App</h1>
+        <h1>StoneMire</h1>
         {username != "" && registered ? <h3>@{username}</h3>: null}
       </nav>
       <main>

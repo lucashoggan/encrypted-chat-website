@@ -19,7 +19,7 @@ const SocketContext = createContext<SocketContextType>({
   }
 });
 
-const SOCKET_SERVER_URL:string =  (import.meta.env.VITE_RUNNING_LOCAL=="true" ? "localhost:8080" : "/");
+const SOCKET_SERVER_URL:string =  (false ? "localhost:8080" : "/");
 
 
 export const useSocket = () => useContext(SocketContext);

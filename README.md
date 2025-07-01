@@ -1,4 +1,4 @@
-# Encrypted Chat Website
+# StoneMire
 A simple chat site which uses
 - Asymetric encryption to make messages only readable by the desiered user
 - Express.js backend with socket.io server to communicate with clients
