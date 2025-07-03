@@ -1,16 +1,4 @@
-/**
- * RSA Encryption/Decryption Utilities
- * Includes: 
- * - Key pair generation
- * - Public/private key export/import
- * - Message encryption/decryption
- */
 
-// ======================== Core Functions ========================
-
-/**
- * Generates RSA-OAEP key pair (public/private)
- */
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
   return await crypto.subtle.generateKey(
     {
@@ -24,25 +12,19 @@ export async function generateKeyPair(): Promise<CryptoKeyPair> {
   );
 }
 
-/**
- * Exports public key as base64 string
- */
+
 export async function exportPublicKey(publicKey: CryptoKey): Promise<string> {
   const exported = await crypto.subtle.exportKey("spki", publicKey);
   return arrayBufferToBase64(exported);
 }
 
-/**
- * Exports private key as base64 string
- */
+
 export async function exportPrivateKey(privateKey: CryptoKey): Promise<string> {
   const exported = await crypto.subtle.exportKey("pkcs8", privateKey);
   return arrayBufferToBase64(exported);
 }
 
-/**
- * Imports public key from base64 string
- */
+
 export async function importPublicKey(base64Key: string): Promise<CryptoKey> {
   const binaryKey = base64ToArrayBuffer(base64Key);
   return await crypto.subtle.importKey(
@@ -54,9 +36,7 @@ export async function importPublicKey(base64Key: string): Promise<CryptoKey> {
   );
 }
 
-/**
- * Imports private key from base64 string
- */
+
 export async function importPrivateKey(base64Key: string): Promise<CryptoKey> {
   const binaryKey = base64ToArrayBuffer(base64Key);
   return await crypto.subtle.importKey(
@@ -68,9 +48,6 @@ export async function importPrivateKey(base64Key: string): Promise<CryptoKey> {
   );
 }
 
-/**
- * Encrypts data with public key
- */
 export async function encryptWithPublicKey(data: string, publicKey: CryptoKey): Promise<string> {
   const encoded = new TextEncoder().encode(data);
   const encrypted = await crypto.subtle.encrypt(
@@ -81,9 +58,7 @@ export async function encryptWithPublicKey(data: string, publicKey: CryptoKey): 
   return arrayBufferToBase64(encrypted);
 }
 
-/**
- * Decrypts data with private key
- */
+
 export async function decryptWithPrivateKey(encryptedData: string, privateKey: CryptoKey): Promise<string> {
   const encryptedBuffer = base64ToArrayBuffer(encryptedData);
   const decrypted = await crypto.subtle.decrypt(
@@ -94,7 +69,7 @@ export async function decryptWithPrivateKey(encryptedData: string, privateKey: C
   return new TextDecoder().decode(decrypted);
 }
 
-// ======================== Helper Functions ========================
+
 
 export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));

@@ -11,6 +11,8 @@ type NewChatProps = {
     setChats: Dispatch<SetStateAction<Message[]>>;
 }
 
+
+
 const NewChatView = ({setNewChatScreen, users, username, socket, setChats}:NewChatProps) => {
 
     const [newChatUsername, setNewChatUsername] = useState("");

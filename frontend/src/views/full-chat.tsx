@@ -14,6 +14,8 @@ type FullChatProps = {
     chats: Message[];
 }
 
+const urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?(?:\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?$/i;
+
 const FullChatView = ({curChatUsername, setCurChatUsername, username, users, socket, setChats, chats}:FullChatProps) => {
 
     const [newMessageContent, setNewMessageContent] = useState("")
@@ -56,7 +58,11 @@ const FullChatView = ({curChatUsername, setCurChatUsername, username, users, soc
                 const timeLabelValue = new Date(val.timestamp*1000).toLocaleString()
                 return <div key={val.fromUsername+":"+timeLabelValue} className={"full-screen-message " + (val.fromUsername!=username ? "sent" : "recv")}>
                 <p className="timestamp">{timeLabelValue}</p>
-                <p className="content">{val.content}</p>
+                <p className="content">{val.content.replace("\n", "\n ").split(' ').map(word => (
+                  urlRegex.test(word.trim()) ? <a href={word.startsWith("https://") ? word : "https://"+word} target="_blank" rel="noopener norefer">
+                    {word + " "}
+                  </a> : word + " "
+              ))}</p>
               </div>})}
             </div>
             <div className="send-message-contain">

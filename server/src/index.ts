@@ -32,7 +32,13 @@ const server = createServer(app)
 const PORT = process.env.PORT || 8080
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: [
+            "http://localhost:8080",
+            "http://localhost:5173",
+            "https://stonemire.lucashoggan.co.uk",
+            "https://chatapp.lucashoggan.co.uk",
+            "https://encrypted-chat-website.onrender.com",
+        ],
         methods: ["GET", "POST"]
     }
 });
@@ -42,8 +48,11 @@ app.use(express.static(path.join(__dirname, '..', 'public'), {
     immutable: true
 }))
 
-app.get("/", (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
+const SPA_ROUTES = ["/"]
+SPA_ROUTES.forEach(route => {
+    app.get(route, (req:Request, res:Response) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
+    })
 })
 
 
